@@ -203,6 +203,7 @@ kind: Deployment
 metadata:
   name: frontend
 spec:
+  replicas: 3
   selector:
     matchLabels:
       app: frontend
@@ -213,9 +214,29 @@ spec:
       annotations:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: topology.storage.csi.cast.ai/csp
+                    operator: In
+                    values:
+                      - aws
+                      - gcp
+                      - azure
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - gophers
+              topologyKey: topology.storage.csi.cast.ai/csp
       containers:
         - name: server
-          image: gcr.io/google-samples/microservices-demo/frontend:v0.2.0
+          image: anjmao/boutique-eshot:0.0.1
           ports:
             - containerPort: 8080
           readinessProbe:
@@ -253,6 +274,10 @@ spec:
               value: "adservice:9555"
             - name: ENV_PLATFORM
               value: "gcp"
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
           # - name: DISABLE_TRACING
           #   value: "1"
           # - name: DISABLE_PROFILER
