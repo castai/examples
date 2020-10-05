@@ -232,7 +232,7 @@ spec:
                   - key: app
                     operator: In
                     values:
-                      - gophers
+                      - frontend
               topologyKey: topology.storage.csi.cast.ai/csp
       containers:
         - name: server
