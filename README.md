@@ -1,9 +1,9 @@
 # examples
-Examples for deploying on CastAI
+Sample app "Boutique web shop" for deploying on CastAI
 
 1. Order multi-cloud cluster in https://console.cast.ai, ideally with 3 clouds.
 
-2. Extract Global Load Balancer DNS name, for instance ingress-nginx-controller.ingress-nginx.12b6ecc5-ffaa-42a1-a897-4bc00b24dcb8.onmulti.cloud you can locate it Service under Endpoints fields in ingress-nging namespace. You can do this with 
+2. Extract Global Load Balancer DNS name, for instance ingress-nginx-controller.ingress-nginx.12b6ecc5-ffaa-42a1-a897-4bc00b24dcb8.onmulti.cloud (it is unique for every Cast k8s cluster) you can locate it Service under Endpoints fields in ingress-nging namespace. You can do this with 
 
 
 ```kubectl get svc -n ingress-nginx```
@@ -39,7 +39,5 @@ spec:
 
 6. Go to URL https:// name created in step 3
 
-7. Refresh site several times to demonstrate that Front-end PODs is distributed on 3 clouds.
-
-8. Profit
+7. Refresh site several times to demonstrate that Front-end PODs are distributed on 3 clouds.
 
