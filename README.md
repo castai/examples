@@ -7,12 +7,13 @@ Examples for deploying on CastAI
 
 
 ```kubectl get svc -n ingress-nginx```
- or click on K8s dashboard UI on console.cast.ai, change namespace to ingress-nginx and go to services.
+   
+   or click on K8s dashboard UI on console.cast.ai, change namespace to ingress-nginx and go to services.
 
 3. Create CNAME in your business DNS zone (shop.example.com) which points to GLB DNS Name from step 2.
 
 4. Modify Ingress resource (very last in yaml file) with CNAME from step 3 in file https://raw.githubusercontent.com/CastAI/examples/main/boutique-eshop/boutique-eshop.yaml
-
+```
 spec:
   tls:
     - hosts:
@@ -20,9 +21,9 @@ spec:
       secretName: demo-tls
   rules:
     - host: boutique-demo.onmulti.cloud
-    
+```    
 Should be
-
+```
 spec:
   tls:
     - hosts:
@@ -30,8 +31,7 @@ spec:
       secretName: demo-tls
   rules:
     - host: shop.example.com
-
- 
+``` 
 
 5. Apply yaml to multi-cloud K8s cluster from step 4
 
