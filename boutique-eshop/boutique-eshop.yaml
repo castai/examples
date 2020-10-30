@@ -224,7 +224,7 @@ spec:
                     values:
                       - aws
                       - gcp
-                      - azure
+                      #- azure
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
