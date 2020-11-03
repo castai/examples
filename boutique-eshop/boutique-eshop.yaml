@@ -754,10 +754,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - saulius-demo.onmulti.cloud
+        - boutique-demo.onmulti.cloud
       secretName: demo-tls
   rules:
-    - host: saulius-demo.onmulti.cloud
+    - host: boutique-demo.onmulti.cloud
       http:
         paths:
           - path: /
