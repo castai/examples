@@ -216,24 +216,26 @@ spec:
     spec:
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
                   - key: topology.storage.csi.cast.ai/csp
                     operator: In
                     values:
                       - aws
                       - gcp
-                      #- azure
+              weight: 100
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: app
-                    operator: In
-                    values:
-                      - frontend
-              topologyKey: topology.storage.csi.cast.ai/csp
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: topology.storage.csi.cast.ai/csp
+                labelSelector:
+                  matchExpressions:
+                    - key: app
+                      operator: In
+                      values:
+                        - frontend
+              weight: 100
       containers:
         - name: server
           image: anjmao/boutique-eshot:0.0.1
@@ -752,10 +754,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - boutique-demo.onmulti.cloud
+        - saulius-demo.onmulti.cloud
       secretName: demo-tls
   rules:
-    - host: boutique-demo.onmulti.cloud
+    - host: saulius-demo.onmulti.cloud
       http:
         paths:
           - path: /
