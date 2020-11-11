@@ -55,14 +55,6 @@ spec:
               value: "currencyservice:7000"
             - name: CART_SERVICE_ADDR
               value: "cartservice:7070"
-          # - name: DISABLE_STATS
-          #   value: "1"
-          # - name: DISABLE_TRACING
-          #   value: "1"
-          # - name: DISABLE_PROFILER
-          #   value: "1"
-          # - name: JAEGER_SERVICE_ADDR
-          #   value: "jaeger-collector:14268"
           resources:
             requests:
               cpu: 100m
@@ -116,12 +108,6 @@ spec:
               value: "8080"
             - name: PRODUCT_CATALOG_SERVICE_ADDR
               value: "productcatalogservice:3550"
-          # - name: DISABLE_TRACING
-          #   value: "1"
-          # - name: DISABLE_PROFILER
-          #   value: "1"
-          # - name: DISABLE_DEBUGGER
-          #   value: "1"
           resources:
             requests:
               cpu: 100m
@@ -148,7 +134,7 @@ kind: Deployment
 metadata:
   name: frontend
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: frontend
@@ -169,6 +155,7 @@ spec:
                     values:
                       - aws
                       - gcp
+                      - azure
               weight: 100
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -225,12 +212,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-          # - name: DISABLE_TRACING
-          #   value: "1"
-          # - name: DISABLE_PROFILER
-          #   value: "1"
-          # - name: JAEGER_SERVICE_ADDR
-          #   value: "jaeger-collector:14268"
           resources:
             requests:
               cpu: 100m
@@ -323,18 +304,14 @@ spec:
           env:
             - name: PORT
               value: "3550"
-          # - name: DISABLE_STATS
-          #   value: "1"
-          # - name: DISABLE_TRACING
-          #   value: "1"
-          # - name: DISABLE_PROFILER
-          #   value: "1"
-          # - name: JAEGER_SERVICE_ADDR
-          #   value: "jaeger-collector:14268"
           readinessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 10
             exec:
               command: ["/bin/grpc_health_probe", "-addr=:3550"]
           livenessProbe:
+            initialDelaySeconds: 10
+            periodSeconds: 10          
             exec:
               command: ["/bin/grpc_health_probe", "-addr=:3550"]
           resources:
@@ -392,12 +369,13 @@ spec:
               cpu: 300m
               memory: 128Mi
           readinessProbe:
-            initialDelaySeconds: 15
+            initialDelaySeconds: 30
+            periodSeconds: 10
             exec:
               command:
                 ["/bin/grpc_health_probe", "-addr=:7070", "-rpc-timeout=5s"]
           livenessProbe:
-            initialDelaySeconds: 15
+            initialDelaySeconds: 30
             periodSeconds: 10
             exec:
               command:
@@ -415,40 +393,6 @@ spec:
     - name: grpc
       port: 7070
       targetPort: 7070
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: loadgenerator
-spec:
-  selector:
-    matchLabels:
-      app: loadgenerator
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app: loadgenerator
-      annotations:
-        sidecar.istio.io/rewriteAppHTTPProbers: "true"
-    spec:
-      terminationGracePeriodSeconds: 5
-      restartPolicy: Always
-      containers:
-        - name: main
-          image: gcr.io/google-samples/microservices-demo/loadgenerator:v0.2.0
-          env:
-            - name: FRONTEND_ADDR
-              value: "frontend:80"
-            - name: USERS
-              value: "10"
-          resources:
-            requests:
-              cpu: 300m
-              memory: 256Mi
-            limits:
-              cpu: 500m
-              memory: 512Mi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -473,12 +417,6 @@ spec:
           env:
             - name: PORT
               value: "7000"
-          # - name: DISABLE_TRACING
-          #   value: "1"
-          # - name: DISABLE_PROFILER
-          #   value: "1"
-          # - name: DISABLE_DEBUGGER
-          #   value: "1"
           readinessProbe:
             exec:
               command: ["/bin/grpc_health_probe", "-addr=:7000"]
@@ -527,14 +465,6 @@ spec:
           env:
             - name: PORT
               value: "50051"
-          # - name: DISABLE_STATS
-          #   value: "1"
-          # - name: DISABLE_TRACING
-          #   value: "1"
-          # - name: DISABLE_PROFILER
-          #   value: "1"
-          # - name: JAEGER_SERVICE_ADDR
-          #   value: "jaeger-collector:14268"
           readinessProbe:
             periodSeconds: 5
             exec:
@@ -583,10 +513,12 @@ spec:
             - containerPort: 6379
           readinessProbe:
             periodSeconds: 5
+            initialDelaySeconds: 10
             tcpSocket:
               port: 6379
           livenessProbe:
             periodSeconds: 5
+            initialDelaySeconds: 10
             tcpSocket:
               port: 6379
           volumeMounts:
@@ -652,12 +584,6 @@ spec:
           env:
             - name: PORT
               value: "9555"
-          # - name: DISABLE_STATS
-          #   value: "1"
-          # - name: DISABLE_TRACING
-          #   value: "1"
-          #- name: JAEGER_SERVICE_ADDR
-          #  value: "jaeger-collector:14268"
           resources:
             requests:
               cpu: 200m
@@ -699,10 +625,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - boutique-demo.onmulti.cloud
+        - buildstuff.demo-gods.online
       secretName: demo-tls
   rules:
-    - host: boutique-demo.onmulti.cloud
+    - host: buildstuff.demo-gods.online
       http:
         paths:
           - path: /
