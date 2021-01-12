@@ -1,0 +1,43 @@
+isMultiAz: True
+
+AZ: aws
+
+masterAddresses: "yb-master-0.yb-masters.yugabyte-aws.svc.cluster.local:7100,yb-master-0.yb-masters.yugabyte-gcp.svc.cluster.local:7100,yb-master-0.yb-masters.yugabyte-do.svc.cluster.local:7100"
+
+enableLoadBalancer: false
+
+storage:
+  master:
+    storageClass: "cast-block-storage"
+  tserver:
+    storageClass: "cast-block-storage"
+
+replicas:
+  master: 1
+  tserver: 1
+  totalMasters: 3
+
+resource:
+  master:
+    requests:
+      cpu: 1
+      memory: 2Gi
+    limits:
+      cpu: 1
+      memory: 2Gi
+  tserver:
+    requests:
+      cpu: 1
+      memory: 4Gi
+    limits:
+      cpu: 1
+      memory: 4Gi
+
+gflags:
+  master:
+    placement_cloud: "aws"
+    placement_region: "eu-central-1"
+  tserver:
+    placement_cloud: "aws"
+    placement_region: "eu-central-1"
+    placement_zone: "eu-central-1a"

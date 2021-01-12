@@ -155,7 +155,6 @@ spec:
                     values:
                       - aws
                       - gcp
-                      - azure
                       - do
               weight: 100
         podAntiAffinity:
@@ -355,7 +354,7 @@ spec:
             - containerPort: 7070
           env:
             - name: REDIS_ADDR
-              value: "redis-cart:6379"
+              value: "yb-tserver-0.yb-tservers.yugabyte-do.svc.cluster.local:6379,yb-tserver-0.yb-tservers.yugabyte-gcp.svc.cluster.local:6379,yb-tserver-0.yb-tservers.yugabyte-aws.svc.cluster.local:6379"
             - name: PORT
               value: "7070"
             - name: LISTEN_ADDR
@@ -495,75 +494,6 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis-cart
-spec:
-  selector:
-    matchLabels:
-      app: redis-cart
-  template:
-    metadata:
-      labels:
-        app: redis-cart
-    spec:
-      containers:
-        - name: redis
-          image: redis:alpine
-          ports:
-            - containerPort: 6379
-          readinessProbe:
-            periodSeconds: 5
-            initialDelaySeconds: 10
-            tcpSocket:
-              port: 6379
-          livenessProbe:
-            periodSeconds: 5
-            initialDelaySeconds: 10
-            tcpSocket:
-              port: 6379
-          volumeMounts:
-            - mountPath: /data
-              name: redis-data
-          resources:
-            limits:
-              memory: 256Mi
-              cpu: 125m
-            requests:
-              cpu: 70m
-              memory: 200Mi
-      volumes:
-        - name: redis-data
-          persistentVolumeClaim:
-            claimName: boutiqueu-pv-claim
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: boutiqueu-pv-claim
-  labels:
-    app: redis-cart
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: redis-cart
-spec:
-  type: ClusterIP
-  selector:
-    app: redis-cart
-  ports:
-    - name: redis
-      port: 6379
-      targetPort: 6379
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
   name: adservice
 spec:
   selector:
@@ -624,10 +554,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - boutique-demo.onmulti.cloud
+        - 1849464756.am-cb2ee573.local.onmulti.cloud
       secretName: demo-tls
   rules:
-    - host: boutique-demo.onmulti.cloud
+    - host: 1849464756.am-cb2ee573.local.onmulti.cloud
       http:
         paths:
           - path: /
