@@ -38,3 +38,8 @@ Run `./deploy.sh`
 
 7. Refresh site several times to demonstrate that Front-end PODs are distributed on 3 clouds.
 
+8. Open Yugabyte UI locally using port-forward.
+```
+kubectl port-forward svc/yb-masters 7000 -n yugabyte-gcp
+```
+Yugabyte UI should be available at http://localhost:7000
