@@ -30,16 +30,30 @@ spec:
     - host: shop.example.com
 ``` 
 
-5. Deploy Yugabyte DB and Boutique eshop microservices. 
+5. Install Yugabyte DB by running`./install_yugabyte.sh` script.
 
-Run `./deploy.sh`
+6. Install Yugabyte Redis tables by running`./install_redis_tables` script.
 
-6. Go to URL https://name created in step 3.
+7. Install Boutique E-shop microservices by running `./install_boutique_eshop` script.
 
-7. Refresh site several times to demonstrate that Front-end PODs are distributed on 3 clouds.
+8. Go to URL https://name created in step 3.
 
-8. Open Yugabyte UI locally using port-forward.
+9. Refresh site several times to demonstrate that Front-end PODs are distributed on 3 clouds.
+
+10. Open Yugabyte UI locally using port-forward.
 ```
 kubectl port-forward svc/yb-masters 7000 -n yugabyte-gcp
 ```
 Yugabyte UI should be available at http://localhost:7000
+
+11. Check on which cloud master leader is running and kill the `yb-master-0` pod.
+Assuming leader is in GCP cloud we use `yugabyte-gcp` namespace do delete yugabyte master.
+```
+kubectl delete pod yb-master-0 -n yugabyte-gcp
+```
+
+12. Open Yugabyte UI as in step 8. If it's not working try port-forward to another namespace.
+
+13. Refresh the app. It should continue to be working.
+
+14. After done cleanup demo resources by running `./cleanup.sh` script.

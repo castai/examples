@@ -21,6 +21,7 @@ kind: Deployment
 metadata:
   name: checkoutservice
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: checkoutservice
@@ -81,6 +82,7 @@ kind: Deployment
 metadata:
   name: recommendationservice
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: recommendationservice
@@ -146,17 +148,6 @@ spec:
         sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
       affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - preference:
-                matchExpressions:
-                  - key: topology.storage.csi.cast.ai/csp
-                    operator: In
-                    values:
-                      - aws
-                      - gcp
-                      - do
-              weight: 100
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
             - podAffinityTerm:
@@ -236,6 +227,7 @@ kind: Deployment
 metadata:
   name: paymentservice
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: paymentservice
@@ -285,6 +277,7 @@ kind: Deployment
 metadata:
   name: productcatalogservice
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: productcatalogservice
@@ -338,6 +331,7 @@ kind: Deployment
 metadata:
   name: cartservice
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: cartservice
@@ -354,7 +348,7 @@ spec:
             - containerPort: 7070
           env:
             - name: REDIS_ADDR
-              value: "yb-tserver-0.yb-tservers.yugabyte-do.svc.cluster.local:6379,yb-tserver-0.yb-tservers.yugabyte-gcp.svc.cluster.local:6379,yb-tserver-0.yb-tservers.yugabyte-aws.svc.cluster.local:6379"
+              value: "yb-tservers.yugabyte-do.svc.cluster.local:6379,yb-tservers.yugabyte-gcp.svc.cluster.local:6379,yb-tservers.yugabyte-aws.svc.cluster.local:6379"
             - name: PORT
               value: "7070"
             - name: LISTEN_ADDR
@@ -397,6 +391,7 @@ kind: Deployment
 metadata:
   name: currencyservice
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: currencyservice
@@ -447,6 +442,7 @@ kind: Deployment
 metadata:
   name: shippingservice
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: shippingservice
@@ -496,6 +492,7 @@ kind: Deployment
 metadata:
   name: adservice
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app: adservice
@@ -554,10 +551,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - 1849464756.am-cb2ee573.local.onmulti.cloud
+        - boutique-demo.onmulti.cloud
       secretName: demo-tls
   rules:
-    - host: 1849464756.am-cb2ee573.local.onmulti.cloud
+    - host: boutique-demo.onmulti.cloud
       http:
         paths:
           - path: /
