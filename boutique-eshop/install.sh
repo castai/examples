@@ -23,13 +23,7 @@ echo "Applying manifests"
 kubectl create namespace demo --dry-run=client -o yaml | kubectl apply -f -
 kubectl apply -n demo -f boutique-eshop.yaml -f boutique-ingress-out.yaml
 
-# Wait until pods are ready.
-PODS=$(kubectl get pods -n demo -o name | cut -d'/' -f2)
-for POD in ${PODS}; do
-    until $(kubectl get pod ${POD} -n demo -o jsonpath='{.status.containerStatuses[0].ready}'); do
-        echo "Waiting for ${POD} to start..."
-        sleep 5
-    done
-done
+echo "Waiting for pods to start"
+kubectl wait --timeout="300s" --for=condition=Ready pods --all -n demo
 
 echo "Visit your app at https://$GSLB_INGRESS_HOSTNAME"
