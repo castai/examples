@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: demo-ingress
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        - replace-me.onmulti.cloud
+      secretName: demo-tls
+  rules:
+    - host: replace-me.onmulti.cloud
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: frontend
+              servicePort: http

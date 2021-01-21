@@ -136,7 +136,7 @@ kind: Deployment
 metadata:
   name: frontend
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: frontend
@@ -144,8 +144,6 @@ spec:
     metadata:
       labels:
         app: frontend
-      annotations:
-        sidecar.istio.io/rewriteAppHTTPProbers: "true"
     spec:
       affinity:
         nodeAffinity:
@@ -615,24 +613,3 @@ spec:
     - name: grpc
       port: 9555
       targetPort: 9555
----
-apiVersion: networking.k8s.io/v1beta1
-kind: Ingress
-metadata:
-  name: demo-ingress
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-spec:
-  tls:
-    - hosts:
-        - boutique-demo.onmulti.cloud
-      secretName: demo-tls
-  rules:
-    - host: boutique-demo.onmulti.cloud
-      http:
-        paths:
-          - path: /
-            backend:
-              serviceName: frontend
-              servicePort: http
