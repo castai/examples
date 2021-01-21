@@ -2,39 +2,44 @@
 
 Sample microservices "Boutique web shop" for deploying on CastAI
 
-1. Create multi-cloud cluster in https://console.cast.ai, ideally with 3 clouds.
+1. Create multi-cloud cluster in https://console.cast.ai.
 
 2. Copy cluster GSLB DNS which can be found in console UI cluster details page. (eg. 1849464756.cluster-d4846470.local.onmulti.cloud).
 
-3. Create CNAME in your business DNS zone (shop.example.com) which points to GLB DNS Name from step 2. This step is optional and you can
-use CAST AI generated DNS.
-
-4. Modify Ingress resource (very last in yaml file) with CNAME from step 3 in file https://raw.githubusercontent.com/CastAI/examples/main/boutique-eshop/boutique-eshop.yaml
+3. Modify Ingress resource `boutique-ingress.yaml` with CNAME from step 2.
 ```
 spec:
   tls:
     - hosts:
-        - boutique-demo.onmulti.cloud
+        - replace-me.onmulti.cloud
       secretName: demo-tls
   rules:
-    - host: boutique-demo.onmulti.cloud
+    - host: replace-me.onmulti.cloud
 ```    
 Should be
 ```
 spec:
   tls:
     - hosts:
-        - shop.example.com
+        - 1849464756.cluster-d4846470.local.onmulti.cloud
       secretName: demo-tls
   rules:
-    - host: shop.example.com
+    - host: 1849464756.cluster-d4846470.local.onmulti.cloud
 ``` 
 
-5. Apply yaml to multi-cloud K8s cluster from step 4
+4. Deploy to multi-cloud K8s cluster.
 
-`kubectl apply -f boutique-eshop.yaml`
+Create namespace:
+```
+kubectl create ns demo
+```
 
-6. Go to URL https://name created in step 3.
+Apply manifests:
+```
+kubectl apply -n demo -f boutique-eshop.yaml -f boutique-ingress.yaml
+```
 
-7. Refresh site several times to demonstrate that Front-end PODs are distributed on 3 clouds.
+5. Go to URL https://name created in step 2.
+
+6. Refresh site several times to demonstrate that Front-end PODs are distributed on 3 clouds.
 
