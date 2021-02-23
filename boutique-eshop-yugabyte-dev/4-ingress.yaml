@@ -1,0 +1,27 @@
+---
+### The spec.tls.hosts and spec.rules.host need to be update with your CAST cluster GSLB value
+### before applying this Ingress. The GSLB address is found in the CAST cluster console.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-ingress
+  namespace: boutique
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+    - hosts:
+        -  1849464756.boutique2-e75dd623.onmulti.cloud #boutique.multi-cloud.com #<<< Modify this to match your GSLB or cname
+      secretName: demo-tls
+  rules:
+    - host:  1849464756.boutique2-e75dd623.onmulti.cloud #boutique.multi-cloud.com #<<< Modify this to match your GSLB or cname
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend
+                port:
+                  name: http
