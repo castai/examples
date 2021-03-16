@@ -208,27 +208,37 @@ spec:
       serviceAccountName: nodereader
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: topology.storage.csi.cast.ai/csp
-                    operator: In
-                    values:
-                      - aws
-                      - gcp
-                      - azure
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                - key: topology.storage.csi.cast.ai/csp
+                  operator: In
+                  values:
+                  - aws
+                  - do
+#        podAntiAffinity:
+#          preferredDuringSchedulingIgnoredDuringExecution:
+#            - weight: 10
+#              podAffinityTerm:
+#                labelSelector:
+#                  matchExpressions:
+#                    - key: app
+#                      operator: In
+#                      values: ["yb-master"]
+#                topologyKey: kubernetes.io/hostname
+
+#          requiredDuringSchedulingIgnoredDuringExecution:
+#            nodeSelectorTerms:
+#              - matchExpressions:
+#                  - key: topology.storage.csi.cast.ai/csp
+#                    operator: In
+#                    values:
+#                      - aws
+#                      - gcp
+#                      - azure
                     # - do
-        # podAntiAffinity:
-        #   preferredDuringSchedulingIgnoredDuringExecution:
-        #   - weight: 100
-        #     podAffinityTerm:
-        #       labelSelector:
-        #         matchExpressions:
-        #         - key: app
-        #           operator: In
-        #           values:
-        #           - "yb-master"
-        #       topologyKey: kubernetes.io/hostname
+
       initContainers:
         - name: init-topology
           image: "photon:3.0-20210108"
@@ -357,27 +367,26 @@ spec:
       serviceAccountName: nodereader
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: topology.storage.csi.cast.ai/csp
-                    operator: In
-                    values:
-                      - aws
-                      - gcp
-                      - azure
-                    # - do
-        # podAntiAffinity:
-        #   preferredDuringSchedulingIgnoredDuringExecution:
-        #   - weight: 100
-        #     podAffinityTerm:
-        #       labelSelector:
-        #         matchExpressions:
-        #         - key: app
-        #           operator: In
-        #           values:
-        #           - "yb-tserver"
-        #       topologyKey: kubernetes.io/hostname
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 100
+              preference:
+                matchExpressions:
+                - key: topology.storage.csi.cast.ai/csp
+                  operator: In
+                  values:
+                  - aws
+                  - do
+#        podAntiAffinity:
+#          preferredDuringSchedulingIgnoredDuringExecution:
+#            - weight: 10
+#              podAffinityTerm:
+#                labelSelector:
+#                  matchExpressions:
+#                    - key: app
+#                      operator: In
+#                      values:
+#                      - "yb-tserver"
+#                topologyKey: kubernetes.io/hostname
       initContainers:
         - name: init-topology
           image: "photon:3.0-20210108"
