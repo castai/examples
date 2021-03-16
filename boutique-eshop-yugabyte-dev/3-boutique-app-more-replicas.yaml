@@ -97,16 +97,6 @@ spec:
       terminationGracePeriodSeconds: 5
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: topology.storage.csi.cast.ai/csp
-                    operator: In
-                    values:
-                      - aws
-                      - gcp
-                      - azure
-                    # - do
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 1
               preference:
@@ -117,6 +107,7 @@ spec:
                       - aws
                       - gcp
                       - azure
+                      - do
       containers:
         - name: server
           image: gcr.io/google-samples/microservices-demo/recommendationservice:v0.2.0
@@ -366,7 +357,7 @@ metadata:
   name: cartservice
   namespace: boutique
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: cartservice
@@ -378,16 +369,6 @@ spec:
       terminationGracePeriodSeconds: 10
       affinity:
         nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: topology.storage.csi.cast.ai/csp
-                    operator: In
-                    values:
-                      - aws
-                      - gcp
-                      - azure
-                    # - do
           preferredDuringSchedulingIgnoredDuringExecution:
             - weight: 1
               preference:
@@ -398,6 +379,7 @@ spec:
                       - aws
                       - gcp
                       - azure
+                      - do
       containers:
         - name: server
           image: gcr.io/google-samples/microservices-demo/cartservice:v0.2.0
