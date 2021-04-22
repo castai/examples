@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-a
+  labels:
+    app: webserver-a
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webserver-a
+  template:
+    metadata:
+      labels:
+        app: webserver-a
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: webserver-a
+              weight: 100
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: '100m'
+          #  limits:
+          #     cpu: '3'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-b
+  labels:
+    app: webserver-b
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webserver-b
+  template:
+    metadata:
+      labels:
+        app: webserver-b
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: webserver-b
+              weight: 100
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: '100m'
+          #  limits:
+          #     cpu: '3'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-c
+  labels:
+    app: webserver-c
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: webserver-c
+  template:
+    metadata:
+      labels:
+        app: webserver-c
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: webserver-c
+              weight: 100
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: '100m'
+          #  limits:
+          #     cpu: '3'
+
+
