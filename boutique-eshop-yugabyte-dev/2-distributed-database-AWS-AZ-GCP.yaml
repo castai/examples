@@ -207,38 +207,14 @@ spec:
     spec:
       serviceAccountName: nodereader
       affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              preference:
-                matchExpressions:
-                - key: topology.storage.csi.cast.ai/csp
-                  operator: In
-                  values:
-                  - aws
-                  - do
-#        podAntiAffinity:
-#          preferredDuringSchedulingIgnoredDuringExecution:
-#            - weight: 10
-#              podAffinityTerm:
-#                labelSelector:
-#                  matchExpressions:
-#                    - key: app
-#                      operator: In
-#                      values: ["yb-master"]
-#                topologyKey: kubernetes.io/hostname
-
-#          requiredDuringSchedulingIgnoredDuringExecution:
-#            nodeSelectorTerms:
-#              - matchExpressions:
-#                  - key: topology.storage.csi.cast.ai/csp
-#                    operator: In
-#                    values:
-#                      - aws
-#                      - gcp
-#                      - azure
-                    # - do
-
+        podAntiAffinity: 
+          requiredDuringSchedulingIgnoredDuringExecution: 
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values: ["yb-master"]
+            topologyKey: kubernetes.io/hostname
       initContainers:
         - name: init-topology
           image: "photon:3.0-20210108"
@@ -366,27 +342,14 @@ spec:
     spec:
       serviceAccountName: nodereader
       affinity:
-        nodeAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 100
-              preference:
-                matchExpressions:
-                - key: topology.storage.csi.cast.ai/csp
-                  operator: In
-                  values:
-                  - aws
-                  - do
-#        podAntiAffinity:
-#          preferredDuringSchedulingIgnoredDuringExecution:
-#            - weight: 10
-#              podAffinityTerm:
-#                labelSelector:
-#                  matchExpressions:
-#                    - key: app
-#                      operator: In
-#                      values:
-#                      - "yb-tserver"
-#                topologyKey: kubernetes.io/hostname
+        podAntiAffinity: 
+          requiredDuringSchedulingIgnoredDuringExecution: 
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values: ["yb-tserver"]
+            topologyKey: kubernetes.io/hostname
       initContainers:
         - name: init-topology
           image: "photon:3.0-20210108"
