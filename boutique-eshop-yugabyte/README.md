@@ -2,7 +2,7 @@
 
 Sample microservices "Boutique web shop" for deploying on CastAI
 
-1. Create multi-cloud HA cluster in https://console.cast.ai with GCP, AWS, DigitalOcean. Use large CAST shape for worker nodes.
+1. Create multi-cloud HA cluster in https://console.cast.ai with GCP, AWS, DigitalOcean. Use large CAST shape for worker nodes. (Cast console -> your cluster -> Nodes -> Add node)
 
 2. Copy cluster GSLB DNS which can be found in console UI cluster details page. (eg. 1849464756.cluster-d4846470.local.onmulti.cloud).
 
