@@ -14,7 +14,8 @@ Replace:
 
 Using helm chart:
 ```
-remoteRead:
+server:
+  remoteRead:
   - name: castai_remote_read
     url: https://api.cast.ai/v1/kubernetes/external-clusters/{clusterId}/prometheus/read
     headers:
