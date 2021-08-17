@@ -31,7 +31,7 @@ prometheus.yml: |
     headers:
       X-API-Key: {apiKey}
 ```
-3. Import CAST AI cluster metrics Grafana dashboard from **./grafana/cluster_metrics.json**
+3. Import CAST AI cluster metrics Grafana dashboard from [grafana/cluster_metrics.json](https://github.com/castai/examples/blob/main/metrics/grafana/cluster_metrics.json)
 
 
 ### Metrics types
