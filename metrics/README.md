@@ -1,37 +1,30 @@
 # CAST AI cluster metrics integration
 
-CAST AI exposes Prometheus [remote read](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#remote_read) api endpoint for integration with your existing Prometheus monitoring stack.
+CAST AI exposes Prometheus [metrics](https://api.dev-master.cast.ai/v1/spec/#/external-kubernetes/PrometheusRawMetrics) api endpoint for integration with your existing Prometheus monitoring stack.
 
 ### Setup guide
 
 1. Create CAST AI API key via Console UI.
 
-2. Configure Prometheus remote read endpoint:
+2. Configure Prometheus scrape job:
 
 Replace:
-* `{clusterId}` with your cluster UUID.
 * `{apiKey}` with your api key.
 
-Using helm chart:
-```
-server:
-  remoteRead:
-  - name: castai_remote_read
-    url: https://api.cast.ai/v1/kubernetes/external-clusters/{clusterId}/prometheus/read
-    headers:
-      X-API-Key: {apiKey}
-```
 
-Directly changing Prometheus configmap:
+```yaml
+scrape_configs:
+  - job_name: 'castai_cluster_metrics'
+    scrape_interval: 10s
+    scheme: https
+    static_configs:
+      - targets: ['api.cast.ai']
+    metrics_path: '/v1/kubernetes/external-clusters/prometheus/metrics'
+    authorization:
+      type: 'Token'
+      credentials: '{apiKey}'
+
 ```
-prometheus.yml: |
-  remote_read:
-  - name: castai_remote_read
-    url: https://api.cast.ai/v1/kubernetes/external-clusters/{clusterId}/prometheus/read
-    headers:
-      X-API-Key: {apiKey}
-```
-3. Import CAST AI cluster metrics Grafana dashboard from [grafana/cluster_metrics.json](https://github.com/castai/examples/blob/main/metrics/grafana/cluster_metrics.json)
 
 
 ### Metrics types
