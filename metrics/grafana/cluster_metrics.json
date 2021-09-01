@@ -8,6 +8,12 @@
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
         "name": "Annotations & Alerts",
+        "target": {
+          "limit": 100,
+          "matchAny": false,
+          "tags": [],
+          "type": "dashboard"
+        },
         "type": "dashboard"
       }
     ]
@@ -15,8 +21,8 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": 15,
-  "iteration": 1629186886293,
+  "id": 13,
+  "iteration": 1630509420994,
   "links": [],
   "panels": [
     {
@@ -25,10 +31,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -39,7 +41,7 @@
       },
       "hiddenSeries": false,
       "id": 7,
-      "interval": "1m",
+      "interval": "5m",
       "legend": {
         "avg": false,
         "current": false,
@@ -58,7 +60,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.5",
+      "pluginVersion": "8.1.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -69,7 +71,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count_over_time(castai_autoscaler_agent_snapshots_received_total[$__interval])",
+          "expr": "sum(increase(castai_autoscaler_agent_snapshots_received_total[$__interval])) by (castai_cluster)",
           "interval": "",
           "legendFormat": "Total",
           "refId": "A"
@@ -124,10 +126,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -138,7 +136,7 @@
       },
       "hiddenSeries": false,
       "id": 8,
-      "interval": "1m",
+      "interval": "5m",
       "legend": {
         "avg": false,
         "current": false,
@@ -157,7 +155,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.5",
+      "pluginVersion": "8.1.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -168,7 +166,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "count_over_time(castai_autoscaler_agent_snapshots_processed_total[$__interval])",
+          "expr": "sum(increase(castai_autoscaler_agent_snapshots_processed_total[$__interval])) by (castai_cluster)",
           "interval": "",
           "legendFormat": "Total",
           "refId": "A"
@@ -223,10 +221,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -256,7 +250,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.5",
+      "pluginVersion": "8.1.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -267,7 +261,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(count_over_time(castai_spot_interrupts_total[$__interval])) by (instance_type)",
+          "expr": "sum(count_over_time(castai_spot_interrupts_total[$__interval])) by (castai_cluster)",
           "interval": "",
           "legendFormat": "{{instance_type}}",
           "refId": "A"
@@ -322,10 +316,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -355,7 +345,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.5",
+      "pluginVersion": "8.1.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -366,7 +356,7 @@
       "targets": [
         {
           "exemplar": true,
-          "expr": "sum(count_over_time(castai_autoscaler_node_placer_unscheduled_pods_total[$__interval])) by (namespace,pod)",
+          "expr": "sum(increase(castai_autoscaler_node_placer_unscheduled_pods_total[$__interval])) by (namespace,pod)",
           "interval": "",
           "legendFormat": "{{namespace}}-{{pod}}",
           "refId": "A"
@@ -421,10 +411,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -455,7 +441,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.5",
+      "pluginVersion": "8.1.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -521,10 +507,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -554,7 +536,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.5",
+      "pluginVersion": "8.1.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -620,10 +602,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -653,7 +631,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.5",
+      "pluginVersion": "8.1.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -719,10 +697,6 @@
       "dashLength": 10,
       "dashes": false,
       "datasource": "${datasource}",
-      "fieldConfig": {
-        "defaults": {},
-        "overrides": []
-      },
       "fill": 1,
       "fillGradient": 0,
       "gridPos": {
@@ -752,7 +726,7 @@
         "alertThreshold": true
       },
       "percentage": false,
-      "pluginVersion": "7.5.5",
+      "pluginVersion": "8.1.0",
       "pointradius": 2,
       "points": false,
       "renderer": "flot",
@@ -814,36 +788,16 @@
     }
   ],
   "refresh": "",
-  "schemaVersion": 27,
+  "schemaVersion": 30,
   "style": "dark",
   "tags": [],
-  "templating": {
-    "list": [
-      {
-        "description": null,
-        "error": null,
-        "hide": 0,
-        "includeAll": false,
-        "label": null,
-        "multi": false,
-        "name": "datasource",
-        "options": [],
-        "query": "prometheus",
-        "queryValue": "",
-        "refresh": 1,
-        "regex": "",
-        "skipUrlSync": false,
-        "type": "datasource"
-      }
-    ]
-  },
   "time": {
-    "from": "now-12h",
+    "from": "now-6h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "CAST AI cluster metrics",
-  "uid": "fQVIF6Gnz",
-  "version": 3
+  "uid": "lZCVs-V7k",
+  "version": 1
 }
