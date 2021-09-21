@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bench-client
+  labels:
+    app: bench
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bench
+  template:
+    metadata:
+      labels:
+        app: bench
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - yb-tserver
+              topologyKey: kubernetes.io/hostname
+      nodeSelector:
+        scheduling.cast.ai/spot: "true"
+      tolerations:
+        - key: scheduling.cast.ai/spot
+          operator: Exists
+      containers:
+        - name: bench
+          image: ubuntu/nginx
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: '16'
+              memory: '64G'
+            limits:
+              cpu: '16'
+              memory: '64G'
