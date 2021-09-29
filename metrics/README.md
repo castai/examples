@@ -33,3 +33,18 @@ Name  | Description
 ------------- | -------------
 castai_autoscaler_agent_snapshots_received_total  | CAST AI Autoscaler agent snapshots received total 
 castai_autoscaler_agent_snapshots_processed_total  | CAST AI Autoscaler agent snapshots processed total
+
+**Example queries:**
+
+Received snapshots count.
+
+```
+sum(increase(castai_autoscaler_agent_snapshots_received_total{castai_cluster="$cluster"}[5m]))
+```
+
+Alert on missing snapshots.
+```
+absent_over_time(castai_autoscaler_agent_snapshots_received_total{castai_cluster="$cluster"}[5m])
+```
+
+NOTE: Replace `$cluster` with existing `castai_cluster` label value.
