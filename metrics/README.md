@@ -29,12 +29,18 @@ scrape_configs:
 
 ### Metrics types
 
-Name  | Description
-------------- | -------------
-castai_autoscaler_agent_snapshots_received_total  | CAST AI Autoscaler agent snapshots received total 
-castai_autoscaler_agent_snapshots_processed_total  | CAST AI Autoscaler agent snapshots processed total
+Name  | Type | Description
+------------- | ------------- | -------------
+castai_autoscaler_agent_snapshots_received_total  | Counter | CAST AI Autoscaler agent snapshots received total
+castai_autoscaler_agent_snapshots_processed_total  | Counter | CAST AI Autoscaler agent snapshots processed total
+castai_cluster_total_cost_hourly | Gauge | CAST AI cluster total cost hourly
 
 **Example queries:**
+
+Cost per cluster.
+```
+sum(castai_cluster_total_cost_hourly{}) by (castai_cluster)
+```
 
 Received snapshots count.
 
