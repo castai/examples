@@ -4,7 +4,7 @@ CAST AI exposes Prometheus [metrics](https://api.dev-master.cast.ai/v1/spec/#/ex
 
 ### Setup guide
 
-1. Create CAST AI API key via Console UI.
+1. Create readonly CAST AI API key via Console UI.
 
 2. Configure Prometheus scrape job:
 
