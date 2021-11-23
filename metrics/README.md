@@ -1,6 +1,6 @@
 # CAST AI cluster metrics integration
 
-CAST AI exposes Prometheus [metrics](https://api.dev-master.cast.ai/v1/spec/#/external-kubernetes/PrometheusRawMetrics) api endpoint for integration with your existing Prometheus monitoring stack.
+CAST AI exposes Prometheus [metrics](https://api.cast.ai/v1/spec/#/dashboard-metrics/PrometheusRawMetrics) api endpoint for integration with your existing Prometheus monitoring stack.
 
 ### Setup guide
 
