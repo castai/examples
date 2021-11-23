@@ -19,7 +19,7 @@ scrape_configs:
     scheme: https
     static_configs:
       - targets: ['api.cast.ai']
-    metrics_path: '/v1/kubernetes/external-clusters/prometheus/metrics'
+    metrics_path: '/v1/kubernetes/clusters/prometheus-raw-metrics'
     authorization:
       type: 'Token'
       credentials: '{apiKey}'
