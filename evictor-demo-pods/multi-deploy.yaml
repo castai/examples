@@ -5,7 +5,7 @@ metadata:
   labels:
     app: webserver-a
 spec:
-  replicas: 4
+  replicas: 5
   selector:
     matchLabels:
       app: webserver-a
@@ -14,15 +14,6 @@ spec:
       labels:
         app: webserver-a
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchLabels:
-                    app: webserver-a
-              weight: 100
       containers:
         - name: nginx
           image: nginx:1.14.2
@@ -30,10 +21,8 @@ spec:
             - containerPort: 80
           resources:
             requests:
-              cpu: '100m'
-          #  limits:
-          #     cpu: '3'
-
+              cpu: '150m'
+              memory: '128Mi'
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -68,8 +57,7 @@ spec:
           resources:
             requests:
               cpu: '100m'
-          #  limits:
-          #     cpu: '3'
+              memory: '256Mi'
 
 ---
 apiVersion: apps/v1
@@ -105,15 +93,13 @@ spec:
           resources:
             requests:
               cpu: '100m'
-          #  limits:
-          #     cpu: '3'
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: nginx-deployment
   labels:
-    app: nginx
+    app: nginx-scoped
 spec:
   replicas: 5
   selector:
@@ -125,6 +111,19 @@ spec:
         app: nginx-scoped
     node-selector:
     spec:
+      topologySpreadConstraints:
+        - maxSkew: 2
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchExpressions:
+              - key: app
+                operator: In
+                values:
+                  - nginx-scoped
+      tolerations:
+        - key: scheduling.cast.ai/spot
+          operator: Exists
       containers:
       - name: nginx
         image: nginx:1.14.2
