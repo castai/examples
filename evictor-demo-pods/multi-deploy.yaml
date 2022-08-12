@@ -76,6 +76,9 @@ spec:
       labels:
         app: webserver-c
     spec:
+      tolerations:
+        - key: scheduling.cast.ai/spot
+          operator: Exists
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -112,7 +115,7 @@ spec:
     node-selector:
     spec:
       topologySpreadConstraints:
-        - maxSkew: 2
+        - maxSkew: 3
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
