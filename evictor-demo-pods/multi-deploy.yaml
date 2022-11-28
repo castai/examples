@@ -40,15 +40,6 @@ spec:
       labels:
         app: webserver-b
     spec:
-      affinity:
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchLabels:
-                    app: webserver-b
-              weight: 100
       containers:
         - name: nginx
           image: nginx:1.14.2
