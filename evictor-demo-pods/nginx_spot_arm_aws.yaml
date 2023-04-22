@@ -1,0 +1,34 @@
+# Example use case:
+# - test out provisioning of both spot & arm64 instances
+# - on AWS, CAST AI will end up creating Spot Graviton nodes with this example
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment-spot-arm
+  labels:
+    app: nginx
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: nginx-scoped
+  template:
+    metadata:
+      labels:
+        app: nginx-scoped
+    node-selector:
+    spec:
+      nodeSelector:
+        scheduling.cast.ai/spot: "true"
+        kubernetes.io/arch: arm64
+      tolerations:
+      - key: "scheduling.cast.ai/spot"
+        operator: Exists      
+      containers:
+      - name: nginx
+        image: nginx:1.24.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 2
