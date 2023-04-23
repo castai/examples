@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: castai-test-spot
+  namespace: castai-agent
+  labels:
+    app: castai-test-spot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: castai-test-spot
+  template:
+    metadata:
+      labels:
+        app: castai-test-spot
+    spec:
+      tolerations:
+        - key: scheduling.cast.ai/spot
+          operator: Exists
+      nodeSelector:
+        scheduling.cast.ai/spot: "true"
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: '100m'
