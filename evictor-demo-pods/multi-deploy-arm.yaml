@@ -1,0 +1,127 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-api
+  labels:
+    app: catalog-api
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: catalog-api
+  template:
+    metadata:
+      labels:
+        app: catalog-api
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      containers:
+        - name: nginx
+          image: nginx:1.24.0
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: '150m'
+              memory: '128Mi'
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-cart-app
+  labels:
+    app: user-cart-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: user-cart-app
+  template:
+    metadata:
+      labels:
+        app: user-cart-app
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      containers:
+        - name: nginx
+          image: nginx:1.24.0
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: '100m'
+              memory: '256Mi'
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checkout-service
+  labels:
+    app: checkout-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: checkout-service
+  template:
+    metadata:
+      labels:
+        app: checkout-service
+    spec:
+      tolerations:
+        - key: scheduling.cast.ai/spot
+          operator: Exists
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    app: checkout-service
+              weight: 100
+      containers:
+        - name: nginx
+          image: nginx:1.24.0
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 500Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: console-ui
+  labels:
+    app: console-ui
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: console-ui
+  template:
+    metadata:
+      labels:
+        app: console-ui
+    spec:
+      nodeSelector:
+        kubernetes.io/arch: arm64
+      tolerations:
+        - key: scheduling.cast.ai/spot
+          operator: Exists
+      containers:
+      - name: nginx
+        image: nginx:1.24.0
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 300m
+            memory: 500Mi
