@@ -1,0 +1,73 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: go-app
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: go-app
+  name: go-app
+  namespace: go-app
+spec:
+  selector:
+    matchLabels:
+      app: go-app
+  template:
+    metadata:
+      labels:
+        app: go-app
+    spec:
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+        - name: app
+          image: ghcr.io/castai/examples/go-vuln:vulnerable
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: go-app
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 30
+            successThreshold: 1
+            timeoutSeconds: 2
+          livenessProbe:
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 3000
+            timeoutSeconds: 1
+          resources:
+            requests:
+              cpu: 250m
+              memory: 100Mi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: go-app
+  namespace: go-app
+spec:
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: go-app
+  selector:
+    app: go-app
+  sessionAffinity: None
+  type: LoadBalancer
