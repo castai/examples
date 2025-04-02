@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lab4-compliance
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bootcamp
+  namespace: lab4-compliance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bootcamp
+  template:
+    metadata:
+      labels:
+        app: bootcamp
+    spec:
+      containers:
+        - name: bootcamp
+          image: gcr.io/google-samples/kubernetes-bootcamp:v1
