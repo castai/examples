@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: lab4-compliance
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: bootcamp-sa
+  namespace: lab4-compliance
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bootcamp
+  namespace: lab4-compliance
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bootcamp
+  template:
+    metadata:
+      labels:
+        app: bootcamp
+    spec:
+      serviceAccountName: bootcamp-sa
+      containers:
+        - name: bootcamp
+          image: gcr.io/google-samples/kubernetes-bootcamp:v1
+          # Security context for container
+          securityContext:
+            runAsNonRoot: true
+            readOnlyRootFilesystem: true
+            privileged: false
+      # Security context for entire pod
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 3000
