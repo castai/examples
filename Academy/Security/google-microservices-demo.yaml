@@ -657,7 +657,7 @@ spec:
                 - ALL
             privileged: false
             readOnlyRootFilesystem: true
-          image: redis:6.2.1
+          image: redis:7.0.0-bullseye
           ports:
             - containerPort: 6379
           readinessProbe:
